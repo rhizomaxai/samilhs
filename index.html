@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="코딩앤플레이 데이터분석 수업 — 학생 팀 프로젝트 대시보드 결과물 모음">
+<title>학생 프로젝트 쇼케이스</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: graph-paper ground, a narrow header band, card grid → program page with thumbnail gallery */
+:root{
+  --bg:#f3f5f8;
+  --grid:#e3e8ef;
+  --surface:#ffffff;
+  --ink:#16213a;
+  --muted:#5b6780;
+  --line:#d5dce7;
+  --accent:#1f4fd1;
+  --accent-soft:#e6edfd;
+  --marker:#f2b21b;
+  --shadow:0 1px 2px rgba(22,33,58,.06),0 8px 24px rgba(22,33,58,.06);
+  --f-display:"Do Hyeon","IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1524;--grid:#18203a;--surface:#161e33;--ink:#e8edf7;--muted:#9aa6c0;--line:#28324d;
+  --accent:#7ea2ff;--accent-soft:#1d2a52;--marker:#f5c242;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1524;--grid:#18203a;--surface:#161e33;--ink:#e8edf7;--muted:#9aa6c0;--line:#28324d;
+  --accent:#7ea2ff;--accent-soft:#1d2a52;--marker:#f5c242;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{
+  background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+}
+.wrap{max-width:1120px;margin:0 auto;padding-block:32px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:13px;color:var(--muted);letter-spacing:.04em}
+.brand .dot{width:10px;height:10px;border-radius:2px;background:var(--marker)}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;letter-spacing:.01em}
+h1{font-size:clamp(34px,6vw,52px);line-height:1.15}
+h1 mark{background:linear-gradient(transparent 58%,color-mix(in srgb,var(--marker) 55%,transparent) 58%);color:inherit;padding:0 .1em}
+.lede{color:var(--muted);max-width:60ch;margin:12px 0 0}
+.hero{display:grid;gap:8px;margin:28px 0 36px}
+
+.label{font-family:var(--f-mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.section-head h2{font-size:26px}
+
+/* school cards */
+.schools{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.school{display:grid;grid-template-rows:auto 1fr;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .18s ease,border-color .18s ease}
+.school:hover{transform:translateY(-3px);border-color:var(--accent)}
+.school-band{position:relative;height:120px;background:var(--accent);overflow:hidden}
+.school-band svg{position:absolute;inset:0;width:100%;height:100%}
+.school-body{padding:18px 20px 20px;display:grid;gap:10px}
+.school-body h3{font-size:26px}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px;margin:0}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0;font-weight:500}
+.go{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line);padding-top:12px;margin-top:4px;font-size:14px;font-weight:600;color:var(--accent)}
+.count{font-family:var(--f-mono);font-size:12px;background:var(--accent-soft);color:var(--accent);padding:3px 8px;border-radius:999px}
+
+.school.soon{background:transparent;border-style:dashed;box-shadow:none;display:grid;place-items:center;min-height:260px;color:var(--muted);text-align:center;padding:24px}
+.school.soon:hover{transform:none;border-color:var(--line)}
+
+/* program page */
+.crumb{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--muted);margin-top:24px}
+.crumb a{color:var(--accent);text-decoration:none;font-weight:600}
+.crumb a:hover{text-decoration:underline}
+.program-head{display:grid;gap:14px;margin:18px 0 28px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:14px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.chip b{font-weight:600}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
+.proj{display:grid;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);transition:transform .18s ease,border-color .18s ease}
+.proj:hover{transform:translateY(-3px);border-color:var(--team)}
+.thumb{aspect-ratio:16/10;max-width:100%;background:var(--bg);border-bottom:1px solid var(--line);position:relative}
+.thumb svg{display:block;width:100%;height:100%}
+.proj-body{padding:14px 18px 16px;display:grid;gap:8px}
+.proj-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.team{font-family:var(--f-display);font-size:22px}
+.team-tag{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--team);color:#fff;font-family:var(--f-mono);font-weight:500;margin-right:8px;vertical-align:2px;font-size:15px}
+.members{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.members li{font-size:14px;padding:2px 10px;border-radius:6px;background:var(--accent-soft)}
+.url{font-family:var(--f-mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.open{font-size:13px;font-weight:600;color:var(--team-ink);white-space:nowrap}
+
+.note{margin-top:28px;display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--marker);border-radius:10px;padding:14px 16px;font-size:14px;color:var(--muted);max-width:760px}
+.note strong{color:var(--ink)}
+footer{margin-top:48px;font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><span class="dot"></span>CODING &amp; PLAY · 데이터분석 수업 결과물</div>
+
+  <!-- HOME -->
+  <main id="view-home">
+    <section class="hero">
+      <span class="label">Student Project Showcase</span>
+      <h1>학생들이 직접 만든 <mark>데이터 대시보드</mark></h1>
+      <p class="lede">학교별 수업에서 학생 팀이 데이터를 분석하고 웹앱으로 배포한 결과물을 모았습니다. 참여 학교를 선택하면 프로그램과 팀별 결과물을 볼 수 있습니다.</p>
+    </section>
+
+    <div class="section-head">
+      <h2>참여 학교</h2>
+      <span class="label" id="school-count"></span>
+    </div>
+    <div class="schools" id="schools"></div>
+  </main>
+
+  <!-- PROGRAM -->
+  <main id="view-program" hidden>
+    <nav class="crumb" aria-label="경로">
+      <a href="#home">← 참여 학교</a><span>/</span><span id="crumb-school"></span>
+    </nav>
+    <section class="program-head">
+      <span class="label" id="prog-label"></span>
+      <h1 id="prog-title"></h1>
+      <div class="chips" id="prog-chips"></div>
+    </section>
+
+    <div class="section-head">
+      <h2>팀 프로젝트</h2>
+      <span class="label">섬네일을 누르면 앱이 새 탭에서 열립니다</span>
+    </div>
+    <div class="gallery" id="gallery"></div>
+
+    <p class="note"><span aria-hidden="true">⏱</span><span><strong>앱이 바로 뜨지 않나요?</strong> Streamlit 무료 앱은 한동안 접속이 없으면 잠들어 있습니다. 화면의 “Yes, get this app back up!” 버튼을 누르고 30초~1분 정도 기다리면 다시 열립니다.</span></p>
+  </main>
+
+  <footer>코딩앤플레이 · 데이터분석 교육 프로그램</footer>
+</div>
+
+<script>
+const DATA = [
+  {
+    id: "samil",
+    school: "삼일고등학교",
+    programs: [{
+      slug: "samil-bigdata",
+      name: "미래유망 빅데이터분야",
+      dept: "ERP스마트경영과",
+      grade: "2학년",
+      platform: "Streamlit",
+      projects: [
+        { team: "A", members: ["이가영","이소정"], url: "https://samila-bv5avfhxrwqdflxu6evpeu.streamlit.app/" },
+        { team: "B", members: ["이정원","채성현","윤봄이","송아랑"], url: "https://samilb-fk7ahu83xnebjmjvvfgeh5.streamlit.app/" },
+        { team: "C", members: ["최인하","민영우"], url: "https://samilc-hskexyshzfk943k9xireu4.streamlit.app/" },
+        { team: "D", members: ["강민지","송현지"], url: "https://samild-ky4zwaguesakcc23fr3nxd.streamlit.app/" },
+        { team: "E", members: ["조성환","김은성","배현욱","홍지민"], url: "https://samile-dmsvgqmykpxsmpjuzcsffd.streamlit.app/" }
+      ]
+    }]
+  }
+];
+
+const TEAM_COLORS = { A:"#1f4fd1", B:"#0f8a6a", C:"#c2410c", D:"#8a3fd1", E:"#b8860b" };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function rng(seed){ let x = 0; for (const ch of seed) x = (x*31 + ch.charCodeAt(0)) >>> 0; return () => (x = (x*1664525 + 1013904223) >>> 0) / 4294967296; }
+
+/* Mini Streamlit-style dashboard drawn per team, deterministic from the URL */
+function thumbSVG(p){
+  const r = rng(p.url), c = TEAM_COLORS[p.team] || "#1f4fd1";
+  const host = new URL(p.url).host;
+  const W=320,H=200;
+  let bars="", n=7;
+  for(let i=0;i<n;i++){ const h=18+r()*58; bars+=`<rect x="${132+i*17}" y="${170-h}" width="11" height="${h}" rx="2" fill="${c}" opacity="${.45+r()*.55}"/>`; }
+  let pts=[]; for(let i=0;i<8;i++) pts.push(`${250+i*8.5},${150-r()*45}`);
+  const kpi = (x,v)=>`<rect x="${x}" y="52" width="56" height="34" rx="4" fill="var(--surface)" stroke="var(--line)"/><rect x="${x+7}" y="59" width="26" height="4" rx="2" fill="var(--muted)" opacity=".5"/><text x="${x+7}" y="79" font-family="IBM Plex Mono,monospace" font-size="12" fill="${c}">${v}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${p.team}팀 대시보드 미리보기">
+    <rect width="${W}" height="${H}" fill="var(--bg)"/>
+    <rect x="0" y="0" width="${W}" height="22" fill="var(--surface)"/>
+    <circle cx="11" cy="11" r="3.5" fill="#ef6a5e"/><circle cx="22" cy="11" r="3.5" fill="#f4bf4f"/><circle cx="33" cy="11" r="3.5" fill="#61c554"/>
+    <rect x="48" y="5" width="${W-58}" height="12" rx="6" fill="var(--bg)"/>
+    <text x="56" y="14" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="var(--muted)">${host.slice(0,48)}</text>
+    <rect x="0" y="22" width="112" height="${H-22}" fill="var(--surface)" opacity=".9"/>
+    <rect x="12" y="36" width="60" height="6" rx="3" fill="var(--muted)" opacity=".55"/>
+    <rect x="12" y="54" width="88" height="14" rx="4" fill="var(--bg)" stroke="var(--line)"/>
+    <rect x="12" y="76" width="88" height="14" rx="4" fill="var(--bg)" stroke="var(--line)"/>
+    <rect x="12" y="102" width="88" height="3" rx="1.5" fill="var(--line)"/><circle cx="${30+r()*55}" cy="103.5" r="5" fill="${c}"/>
+    <rect x="12" y="120" width="70" height="5" rx="2.5" fill="var(--muted)" opacity=".35"/>
+    <rect x="12" y="131" width="54" height="5" rx="2.5" fill="var(--muted)" opacity=".35"/>
+    <text x="126" y="44" font-family="Do Hyeon,sans-serif" font-size="15" fill="var(--ink)">${p.team}팀 데이터 대시보드</text>
+    ${kpi(126,(r()*90+10).toFixed(1))}${kpi(188,Math.round(r()*900+100))}${kpi(250,(r()*40).toFixed(1)+"%")}
+    <line x1="126" y1="170" x2="${W-10}" y2="170" stroke="var(--line)"/>
+    ${bars}
+    <polyline points="${pts.join(" ")}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function bandSVG(){
+  let s="", r=rng("samil");
+  for(let i=0;i<14;i++){ const h=20+r()*70; s+=`<rect x="${20+i*24}" y="${120-h}" width="14" height="${h}" fill="#fff" opacity="${.12+r()*.22}"/>`; }
+  return `<svg viewBox="0 0 360 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true">${s}<polyline points="0,90 60,70 120,78 180,46 240,52 300,26 360,30" fill="none" stroke="#f2b21b" stroke-width="3"/></svg>`;
+}
+
+function renderHome(){
+  const el = document.getElementById("schools");
+  el.innerHTML = DATA.map(s => {
+    const p = s.programs[0];
+    const total = s.programs.reduce((a,x)=>a+x.projects.length,0);
+    return `<a class="school" href="#${p.slug}">
+      <div class="school-band">${bandSVG()}</div>
+      <div class="school-body">
+        <span class="label">참여 학교</span>
+        <h3>${esc(s.school)}</h3>
+        <dl class="meta">
+          <dt>프로그램</dt><dd>${esc(p.name)}</dd>
+          <dt>참여학과</dt><dd>${esc(p.dept)} ${esc(p.grade)}</dd>
+          <dt>배포</dt><dd>${esc(p.platform)} 웹앱</dd>
+        </dl>
+        <div class="go"><span>결과물 보기 →</span><span class="count">${total}개 팀</span></div>
+      </div>
+    </a>`;
+  }).join("") + `<div class="school soon"><div><div class="label">Coming soon</div><p style="margin:6px 0 0">다음 참여 학교가<br>이곳에 추가됩니다</p></div></div>`;
+  document.getElementById("school-count").textContent = `${DATA.length}개 학교`;
+}
+
+function renderProgram(slug){
+  let school, prog;
+  for (const s of DATA) for (const p of s.programs) if (p.slug === slug){ school = s; prog = p; }
+  if (!prog) return false;
+  document.getElementById("crumb-school").textContent = school.school;
+  document.getElementById("prog-label").textContent = school.school;
+  document.getElementById("prog-title").textContent = prog.name;
+  document.getElementById("prog-chips").innerHTML =
+    `<span class="chip">참여학과 <b>${esc(prog.dept)}</b></span>
+     <span class="chip">학년 <b>${esc(prog.grade)}</b></span>
+     <span class="chip">팀 <b>${prog.projects.length}</b></span>
+     <span class="chip">참여 학생 <b>${prog.projects.reduce((a,p)=>a+p.members.length,0)}명</b></span>`;
+  document.getElementById("gallery").innerHTML = prog.projects.map(p => {
+    const c = TEAM_COLORS[p.team];
+    return `<a class="proj" href="${esc(p.url)}" target="_blank" rel="noopener" style="--team:${c};--team-ink:${c}">
+      <div class="thumb">${thumbSVG(p)}</div>
+      <div class="proj-body">
+        <div class="proj-top"><span class="team"><span class="team-tag">${p.team}</span>${p.team}팀</span><span class="open">앱 열기 ↗</span></div>
+        <ul class="members">${p.members.map(m=>`<li>${esc(m)}</li>`).join("")}</ul>
+        <span class="url">${esc(new URL(p.url).host)}</span>
+      </div>
+    </a>`;
+  }).join("");
+  return true;
+}
+
+function route(){
+  const h = location.hash.slice(1);
+  const isProg = h && h !== "home" && renderProgram(h);
+  document.getElementById("view-home").hidden = !!isProg;
+  document.getElementById("view-program").hidden = !isProg;
+  window.scrollTo(0,0);
+}
+renderHome();
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
